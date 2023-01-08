@@ -4,63 +4,67 @@ using UnityEngine;
 
 public class DSAManager : MonoBehaviour
 {
-    // public GameObject barOne;
-    // public GameObject barTwo;
-    
-    // public GameObject barThree;
-    // public GameObject barFour;
-    // public GameObject barFive;
-    // public GameObject barSix;
-    // public GameObject barSeven;
 
-    // public GameObject positionOne = GameObject.Find("Position 1");
-    // public GameObject positionTwo = GameObject.Find("Position 2");
-    // public GameObject positionThree = GameObject.Find("Position 3");
-    // public GameObject positionFour = GameObject.Find("Position 4");
-    // public GameObject positionFive = GameObject.Find("Position 5");
-    // public GameObject positionSix = GameObject.Find("Position 6");
-    // public GameObject positionSeven = GameObject.Find("Position 7");
-
-    public List<GameObject> Positions = new List<GameObject>();
-    public List<GameObject> Bars = new List<GameObject>();
-
-    // void Start()
-    // {
-            
-    //     Positions.Add(positionOne);
-    //     Positions.Add(positionTwo);
-    //     Positions.Add(positionThree);
-    //     Positions.Add(positionFour);
-    //     Positions.Add(positionFive);
-    //     Positions.Add(positionSix);
-    //     Positions.Add(positionSeven);
-
-    //     Positions.Add(barOne);
-    //     Positions.Add(barTwo);
-    //     Positions.Add(barThree);
-    //     Positions.Add(barFour);
-    //     Positions.Add(barFive);
-    //     Positions.Add(barSix);
-    //     Positions.Add(barSeven);
+    public List<GameObject> Positions = new List<GameObject>(); // List han mga possible positions han mga bars;
+    public List<GameObject> Bars = new List<GameObject>(); // list han mga bars
 
 
-    // }
-    
-    public void Simulate()
+    public int itemToFind;
+    [Range(0.0f, 5.0f)]
+    public float searchSpeed;
+    public GameObject itemFound;
+    public Color currentItem = new Color(0, 41, 255, 255);
+    public Color defaultColor = new Color(255,255,255,255);
+    // amo ine an value na mag determine kun gin click ba or wry an linear search button
+    public bool checkedLinearSearch = false; 
+
+    // check kun gin click han user an linear search button. 
+    // kun wry gin click then dire mag run an linear search pag click han simulation button
+    public void isChecked()
     {
+        checkedLinearSearch = true;
+    }
+
+    // This function, if called, will perfrom linear search on the bars collections
+    public IEnumerator LinearSearch()
+    {  
+        for(int i = 0; i<Bars.Count; i++)
+        {
+            Debug.Log("IT worked");
+            Bars[i].GetComponent<SpriteRenderer>().color = currentItem;
+            if(i == itemToFind){
+                Bars[i].GetComponent<SpriteRenderer>().color = currentItem;
+                GameObject tempBox = (GameObject)Instantiate(itemFound, new Vector3(28.6f,30.7f,0), Quaternion.identity);
+                TextMesh theText = tempBox.transform.GetComponent<TextMesh>();
+                theText.text = "ITEM FOUND";
+                break;
+
+            }
+            yield return new WaitForSeconds(searchSpeed);
+            Bars[i].GetComponent<SpriteRenderer>().color = defaultColor;
+        }
         
     }
 
+    // This function has the task of check if what functions has been checked and which to run based on those boolean values
+    public void Simulate()
+    {
+        if(checkedLinearSearch)
+        {
+            StartCoroutine(LinearSearch());
+        }else{
+            Debug.Log("Linear Search Was Not Clicked");
+        }
+    }
+
+
+    // This function will run once when the program starts
     void Start()
     {
-        for(int i = 1; i <= 7; i++)
+        for(int i = 1; i <= 32; i++)
         {
             Positions.Add(GameObject.Find($"Position {i}"));
-        }
-
-        for(int b = 1; b <= 7; b++)
-        {
-            Bars.Add(GameObject.Find($"Bar {b}"));
+            Bars.Add(GameObject.Find($"Bar {i}"));
         }
 
         
