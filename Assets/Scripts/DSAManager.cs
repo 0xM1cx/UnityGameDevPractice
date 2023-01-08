@@ -10,6 +10,7 @@ public class DSAManager : MonoBehaviour
 
 
     public int itemToFind;
+    public GameObject CurrentItem;
     [Range(0.0f, 5.0f)]
     public float searchSpeed;
     public GameObject itemFound;
@@ -30,7 +31,7 @@ public class DSAManager : MonoBehaviour
     {  
         for(int i = 0; i<Bars.Count; i++)
         {
-            Debug.Log("IT worked");
+            
             Bars[i].GetComponent<SpriteRenderer>().color = currentItem;
             if(i == itemToFind){
                 Bars[i].GetComponent<SpriteRenderer>().color = currentItem;
@@ -61,6 +62,7 @@ public class DSAManager : MonoBehaviour
     // This function will run once when the program starts
     void Start()
     {
+        CurrentItem = GameObject.Find("CurrentItem");
         for(int i = 1; i <= 32; i++)
         {
             Positions.Add(GameObject.Find($"Position {i}"));
